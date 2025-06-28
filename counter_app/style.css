@@ -1,0 +1,52 @@
+body {
+    font-family      : sans-serif;
+    background-color : bisque;
+    display          : flex;
+    justify-content  : center;
+    align-items      : center;
+    height           : 100vp;
+    margin           : 0;
+}
+
+.container {
+    text-align    : center;
+    background    : white;
+    padding       : 20px;
+    border-radius : 12px;
+    box-shadow    : 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+#count {
+    font-size : 48px;
+    margin    : 20px 0;
+    color     : black;
+}
+
+.buttons button {
+    font-size     : 16px;
+    margin        : 0 10px;
+    padding       : 10px 20px;
+    border        : none;
+    border-radius : 6px;
+    cursor        : pointer;
+    transition    : 0.2s;
+}
+
+#increase {
+    background-color: blue;
+    color           : white;
+}
+
+#decrease {
+    background-color: red;
+    color           : white;
+}
+
+#reset {
+    background-color: yellow;
+    color           : black;
+}
+
+.buttons button:hover{
+    opacity: 0.5;
+}

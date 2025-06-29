@@ -1,6 +1,41 @@
-PJ Name    : Counter App
-Skills     : HTML,CSS,JavaScript(Event,DOM)
-How to use : If you click the blue botton or press right arrow key, Counter will increase.
-             If you click the red botton or press left arrow key, Counter will decrease.
-             If you click the yellow button or press space key, counter will be 0.
-URL        : https://muro-haya.github.io/web_dev/counter_app/
+# 📈 Counter App
+
+A simple counter application.  
+You can increase, decrease, or reset the count using buttons.
+
+---
+
+## 🌐 Demo
+
+[**Open the App**](https://muro-haya.github.io/web_dev/counter_app/)
+
+![alt text](./screenshot.png)
+
+---
+
+## ✨ Features
+
+- Increment the counter by 1
+- Decrement the counter by 1
+- Reset the counter to 0
+- Display the current count on screen
+
+---
+
+## 🛠️ Built With
+
+- HTML
+- CSS
+- JavaScript (Vanilla)
+
+---
+
+## 📂 Project Structure 
+counter_app/  
+├── index.html  
+├── style.css  
+└── script.js  
+
+---
+## 🙌 Author
+[@muro-haya](https://github.com/muro-haya)

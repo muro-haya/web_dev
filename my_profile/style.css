@@ -9,27 +9,70 @@ body {
 }
 
 header {
-    text-align: center;
-    margin-bottom: 40px;
+    height: 400px;
+    background-image: url('images/header.jpg');
+    background-size: cover;
+    color: white;
+    justify-content: center;
+    font-size: 2em;
 }
 
-h1 {
-    font-size: 2em;
+.header-container{
+    margin-left: 20px;
     margin-bottom: 0.2em;
 }
 
-h2 {
-    color: #007acc;
-    margin-top: 0.2em;
+.header-container h1 {
+    font-size: 2em;
+    margin-bottom: 0;
 }
 
-a {
-    color: #007acc;
-    text-decoration: none;
+.header-container p {
+    margin-top: 0;
 }
 
-a:hover {
-    text-decoration: underline;
+.profile-container {
+  display: flex;
+  align-items: center; /* 垂直方向中央揃え */
+  gap: 20px; /* 画像とテキストの間隔 */
+}
+
+.profile-text p {
+  margin: 0 0 8px 0; /* 段落の余白を調整 */
+}
+
+.projects {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.projectCard {
+    background: white;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.projectCard:hover {
+    transform: translateY(-5px);
+    background-color: gainsboro;
+}
+
+.projectCard img {
+    width : auto;
+    height: 300px;
+    width: 200px;
+}
+
+a.projectLink {
+    text-decoration: none; /* 下線を消す */
+    color: black;        /* 親要素の色に合わせる */
 }
 
 footer {

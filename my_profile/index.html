@@ -1,48 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name   ="viewport"
-              content="width=device-width,initial-scal=1.0">
-              <title>Murofushi Hayato | Self introduction</title>
-              <link rel ="stylesheet"
-                    href="style.css">
-    </head>
-    <body>
-        <header>
-            <h1>Hayato Murofushi</h1>
-            <p>I'm studing English and Web development.</p>
-        </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hayato Murofushi | Web Developer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-        <section>
-            <h2>Profile</h2>
-            <p>
-                <img src="images/profile_img.jpg" alt="picture" width="200" height="200"><br>
-                Hello!! My name is Hayato Murofushi.<br>
-                I have some development experience using C language.
-                I'm studying HTML,CSS and JavaScript now,because I want to be Web developer.
-            </p>
-        </section>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <h1>Hayato <br>Murofushi</h1>
+      <p>Studying English <br> & <br> Web Development</p>
+    </div>
+  </header>
 
-        <section>
-            <h2>Skills</h2>
-            <ul>
-                <li>C language(5 year)</li>
-                <li>Python(2 year)</li>
-                <li> HTML,CSS and JavaScript(studying)</li>
-            </ul>
-        </section>
+  <main>
 
-        <section>
-            <h2>Link</h2>
-            <ul>
-                <li><a href  ="https://github.com/muro-haya"
-                       target="_blank">
-                    GitHub</a></li>
-            </ul>
-        </section>
-        <footer>
-            <p>@ 27 June 2025 Hayato Murofushi</p>
-        </footer>
-    </body>
+    <!-- Profile Section -->
+    <section>
+      <h2>Profile</h2>
+      <div class="profile-container">
+        <div class="profile-text">
+          <p>Hello! I'm Hayato Murofushi, a Japanese aspiring web developer currently living in Australia on a working holiday visa.</p>
+          <p>I have 5 years of experience with the C language, and recently started focusing on front-end development. I'm studying HTML, CSS, and JavaScript daily to become a junior developer.</p>
+        </div>
+        <img src="images/profile_img.jpg" alt="My profile photo" width="200" height="200">
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        <li>C Language (5 years)</li>
+        <li>Python (2 years)</li>
+        <li>HTML, CSS, JavaScript (currently learning)</li>
+        <li>Tools: Git & GitHub, VSCode </li>
+      </ul>
+    </section>
+
+    <!-- Projects Section -->
+    <h2>Projects</h2>
+    <section class="projects" >
+      <div class="projectCard">
+        <a href="https://github.com/muro-haya/web_dev/blob/main/calculator_app/README.md" target="_blank">
+          <h3>Calculator App</h3>
+          <img src="images/calculator.png"
+               alt="project1">
+          <p> - A basic calculator using JavaScript.</p>
+        </a>
+      </div>
+      <div class="projectCard">
+        <a href="https://github.com/muro-haya/web_dev/blob/main/toDoList_app/README.md" target="_blank">
+            <h3>To-Do List App</h3>
+            <img src="images/todolist.png"
+                 alt="project2">
+            <p> - A simple task manager with local storage.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Links Section -->
+    <section>
+      <h2>Links</h2>
+      <ul>
+        <li>
+          <a href="https://github.com/muro-haya" target="_blank">GitHub</a>
+        </li>
+        <!-- SNSがあれば追加もおすすめ -->
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Hayato Murofushi | Updated July 2025</p>
+  </footer>
+
+</body>
 </html>

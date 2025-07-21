@@ -1,0 +1,44 @@
+body{
+    background-color: black;
+}
+
+main {
+    font-family      : sans-serif;
+    background-color : white;
+    width            : 400px;
+    height           : 458px;
+    padding          : 24px;
+    border-radius    : 20px;
+}
+
+#cookies_message {
+    font-size: 18px;
+}
+
+button {
+    cursor        : pointer;
+    border        : none;
+    margin        : 0 auto;
+    padding       : 10px;
+    font-size     : 18px;
+    height        : 42px;
+    width         : 352px;
+    border-radius : 10px;
+}
+
+.container_btn{
+    display        : flex;
+    flex-direction : column;
+    gap            : 20px;
+}
+
+#Configure_btn {
+    background-color : #dee3fa;
+    color            : #6b83fa;
+    margin-top       : 154px;
+}
+
+#Confirm_btn {
+    background-color : #6b83fa;
+    color            : white;
+}

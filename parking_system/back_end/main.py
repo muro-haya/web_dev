@@ -46,3 +46,7 @@ def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_d
     db.commit()
     db.refresh(slot)
     return slot
+
+@app.get("/")
+def root():
+    return {"message": "Parking System Backend is running!"}

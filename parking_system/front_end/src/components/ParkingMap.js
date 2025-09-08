@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { getSlots, updateSlot } from "../api";
-import { ReactComponent as ParkingSVG } from "../assets/parkingMap.svg"
+import { ReactComponent as ParkingSVG } from "../assets/parkingMap_v2.svg"
 import SlotModal from "./SlotModal";
 
 
@@ -93,7 +93,8 @@ export default function ParkingMap(){
     };
 
     return (
-        <div className="relative w-full max-w-4x1 mx-auto" style={{ height: 600 }}>
+        <>
+        <div className="w-full max-w-4xl mx-auto" style={{ height: 600 }}>
             <ParkingSVG 
                 ref={svgRef}
                 className="w-full h-auto"
@@ -129,13 +130,14 @@ export default function ParkingMap(){
                         </span>}
                 </div>
             ))}
-            {selected && (
+        </div>
+        {selected && (
                 <SlotModal
                     slot={selected}
                     onClose={() => setSelected(null)}
                     onSave={handleSave}
                 />
-            )}
-        </div>
+        )}
+        </>
     );
 }

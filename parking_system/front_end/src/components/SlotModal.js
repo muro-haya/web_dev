@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 
-export default function SlotModal({ slot, onClose, onSave  }) {
+export default function SlotModal({ slot, onClose, onSave }) {
     const [carNumber, setCarNumber] = useState(slot.car_number || "");
 
     const handleSave = async () => {
@@ -8,32 +9,73 @@ export default function SlotModal({ slot, onClose, onSave  }) {
         onClose();
     };
 
-    return (
-        <div className="fixed inset-0 bg-black/50 flex item-center justify-center">
-            <div className="bg-white p-4 rounded-lg">
-                <h2>Parking Space {slot.number}</h2>
+    const modalContent = (
+        <div style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999
+        }}>
+            <div style={{
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "10px",
+                width: "300px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+            }}>
+                <h2 style={{ marginBottom: "15px" }}>Parking Space {slot.number}</h2>
                 <input
                     type="text"
                     value={carNumber}
                     onChange={(e) => setCarNumber(e.target.value)}
-                    className="border p-2 w-full"
                     placeholder="Number"
+                    style={{
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "5px",
+                        border: "1px solid #ccc",
+                        marginBottom: "15px",
+                        backgroundColor: "white"
+                    }}
                 />
-                <div className="mt-3 flex justify-end">
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
                     <button
-                      onClick={handleSave}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                        onClick={handleSave}
+                        style={{
+                            backgroundColor: "#3b82f6",
+                            color: "white",
+                            padding: "8px 16px",
+                            borderRadius: "5px",
+                            border: "none",
+                            cursor: "pointer",
+                            marginRight: "10px"
+                        }}
                     >
-                      Save
+                        Save
                     </button>
                     <button
-                      onClick={onClose}
-                      className="ml-2 bg-gray-300 px-4 py-2 rounded"
+                        onClick={onClose}
+                        style={{
+                            backgroundColor: "#e5e7eb",
+                            color: "#111",
+                            padding: "8px 16px",
+                            borderRadius: "5px",
+                            border: "none",
+                            cursor: "pointer"
+                        }}
                     >
-                      Close
+                        Close
                     </button>
                 </div>
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }

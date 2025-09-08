@@ -9,7 +9,7 @@ def init_slots():
         #     return
 
         if db.query(Slot).count() == 0:
-            for i in range(1, 26):
+            for i in range(1, 33):
                 db.add(Slot(number=f"S{i}", status="empty"))
             db.commit()
     finally:

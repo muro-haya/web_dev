@@ -1,0 +1,128 @@
+<svg width="950" height="550" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="100%" height="100%" fill="#ccccccbe" />
+
+  <!-- A -->
+  <rect id="slot-1" x="150" y="130" width="80" height="50" fill="#1a1a1a" />
+  <text x="165" y="145" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">1</text>
+
+  <rect id="slot-2" x="150" y="190" width="80" height="50" fill="#1a1a1a"/>
+  <text x="165" y="205" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">2</text>
+
+  <rect id="slot-3" x="150" y="250" width="80" height="50" fill="#1a1a1a"/>
+  <text x="165" y="265" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">3</text>
+
+  <rect id="slot-4" x="150" y="310" width="80" height="50" fill="#1a1a1a"/>
+  <text x="165" y="325" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">4</text>
+
+  <rect id="slot-5" x="340" y="60" width="80" height="50" fill="#1a1a1a"/>
+  <text x="355" y="75" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">5</text>
+
+  <rect id="slot-6" x="280" y="130" width="80" height="50" fill="#1a1a1a"/>
+  <text x="295" y="145" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">6</text>
+
+  <rect id="slot-7" x="280" y="260" width="80" height="50" fill="#1a1a1a"/>
+  <text x="295" y="275" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">7</text>
+
+  <rect id="slot-8" x="460" y="180" width="50" height="80" fill="#1a1a1a " />
+  <text x="475" y="195" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">8</text>
+
+  <rect id="slot-9" x="380" y="280" width="50" height="80" fill="#1a1a1a" />
+  <text x="395" y="295" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">9</text>
+
+  <rect id="slot-10" x="460" y="280" width="50" height="80" fill="#1a1a1a" />
+  <text x="475" y="295" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">10</text>
+
+  <!-- B -->
+  <rect id="slot-11" x="550" y="60" width="50" height="80" fill="#1a1a1a"/>
+  <text x="565" y="75" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">11</text>
+
+  <rect id="slot-12" x="550" y="190" width="50" height="80" fill="#1a1a1a" />
+  <text x="565" y="205" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">12</text>
+
+  <rect id="slot-13" x="600" y="280" width="50" height="80" fill="#1a1a1a" />
+  <text x="615" y="295" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">13</text>
+
+  <rect id="slot-14" x="760" y="100" width="80" height="50" fill="#1a1a1a"/>
+  <text x="775" y="115" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">14</text>
+
+  <rect id="slot-15" x="760" y="155" width="80" height="50" fill="#1a1a1a" />
+  <text x="775" y="170" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">15</text>
+
+  <rect id="slot-16" x="760" y="210" width="80" height="50" fill="#1a1a1a" />
+  <text x="775" y="225" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">16</text>
+
+  <rect id="slot-17" x="760" y="265" width="80" height="50" fill="#1a1a1a" />
+  <text x="775" y="280" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">17</text>
+
+  <rect id="slot-18" x="760" y="320" width="80" height="50" fill="#1a1a1a" />
+  <text x="775" y="335" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">18</text>
+
+
+  <!-- OUT SIDE -->
+  <rect id="slot-19" x="780" y="390" width="80" height="50" fill="#1a1a1a" />
+  <text x="795" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">19</text>
+
+  <rect id="slot-20" x="690" y="390" width="80" height="50" fill="#1a1a1a" />
+  <text x="705" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">20</text>
+
+  <rect id="slot-21" x="600" y="390" width="80" height="50" fill="#1a1a1a" />
+  <text x="615" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">21</text>
+
+  <rect id="slot-22" x="510" y="390" width="80" height="50" fill="#1a1a1a"/>
+  <text x="525" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">22</text>
+
+  <rect id="slot-23" x="420" y="390" width="80" height="50" fill="#1a1a1a"/>
+  <text x="435" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">23</text>
+
+  <rect id="slot-24" x="330" y="390" width="80" height="50" fill="#1a1a1a"/>
+  <text x="345" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">24</text>
+
+  <rect id="slot-25" x="240" y="390" width="80" height="50" fill="#1a1a1a"/>
+  <text x="255" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">25</text>
+
+  <rect id="slot-26" x="150" y="390" width="80" height="50" fill="#1a1a1a"/>
+  <text x="165" y="405" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">26</text>
+
+  <rect id="slot-27" x="30" y="340" width="80" height="50" fill="#1a1a1a"/>
+  <text x="45" y="355" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">27</text>
+
+  <rect id="slot-28" x="30" y="280" width="80" height="50" fill="#1a1a1a " />
+  <text x="45" y="295" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">28</text>
+
+  <rect id="slot-29" x="30" y="220" width="80" height="50" fill="#1a1a1a" />
+  <text x="45" y="235" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">29</text>
+
+  <rect id="slot-30" x="30" y="160" width="80" height="50" fill="#1a1a1a" />
+  <text x="45" y="175" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">30</text>
+
+  <rect id="slot-31" x="30" y="100" width="80" height="50" fill="#1a1a1a" />
+  <text x="45" y="115" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">31</text>
+  
+  <rect id="slot-32" x="140" y="20" width="50" height="80" fill="#1a1a1a" />
+  <text x="155" y="35" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">32</text>
+
+  <rect id="slot-33" x="760" y="45" width="80" height="50" fill="#1a1a1a" />
+  <text x="775" y="60" fill="white" font-size="15" text-anchor="middle" dominant-baseline="middle">33</text>
+
+  <!-- 真ん中の仕切り -->
+  <rect x="530" y="30" width="6" height="350" fill="grey"/>
+  
+  <!-- A -->
+  <text x="380" y="200" fill="blue" font-size="30" font-weight="bold">A</text>
+  
+  <rect x="260" y="30" width="3" height="170" fill="grey"/>
+  <rect x="260" y="30" width="610" height="3" fill="grey"/>
+  <rect x="120" y="105" width="140" height="3" fill="grey"/>
+  <rect x="120" y="105" width="3" height="275" fill="grey"/>
+  <rect x="120" y="380" width="750" height="3" fill="grey"/>
+  
+  <!-- B -->
+  <text x="660" y="200" fill="blue" font-size="30" font-weight="bold">B</text>
+
+  <rect x="870" y="30" width="3" height="355" fill="grey"/>
+
+  <rect x="440" y="30" width="80" height="4" fill="red"/>
+  <rect x="570" y="30" width="80" height="4" fill="red"/>
+
+</svg>

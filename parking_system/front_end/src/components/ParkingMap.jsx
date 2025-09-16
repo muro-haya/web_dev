@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef, useCallback} from 'react';
 import { getSlots, updateSlot } from "../api";
 import { ReactComponent as ParkingSVG } from "../assets/parkingMap_v2.svg"
 import SlotModal from "./SlotModal";
@@ -9,43 +9,56 @@ export default function ParkingMap(){
     const [selected, setSelected] = useState(null);
     const svgRef = useRef(null);
 
-    useEffect(() => {
-        const fetchSlots = async () => {
+    const calculateSlots = useCallback(
+        async () => {
             if (!svgRef.current) return;
 
+            const svg = svgRef.current;
+            if (!svg.viewBox || !svg.viewBox.baseVal) return;
+
+            const viewBox = svg.viewBox.baseVal;
+            const rect = svg.getBoundingClientRect();
+
+            const scaleX = rect.width / viewBox.width;
+            const scaleY = rect.height / viewBox.height;
+
             // SVG上の座標情報を取得
-            const slotElements = svgRef.current.querySelectorAll("[id^=slot-]");
+            const slotElements = svg.querySelectorAll("[id^=slot-]");
             const slotPositions = Array.from(slotElements).map((el) => {
                 const bbox = el.getBBox();
                 return {
-                    id: parseInt(el.id.replace("slot-", ""), 10),
-                    number: el.id.replace("slot-", ""),
-                    x: bbox.x,
-                    y: bbox.y,
-                    width: bbox.width,
-                    height: bbox.height,
+                  id: parseInt(el.id.replace("slot-", ""), 10),
+                  number: el.id.replace("slot-", ""),
+                  x: bbox.x * scaleX,
+                  y: bbox.y * scaleY,
+                  width: bbox.width * scaleX,
+                  height: bbox.height * scaleY,
                 };
             });
-
             // バックエンドから現在の状態を取得
-            const backendSlots = await getSlots(); // {id, car_number, status} の配列
+            const backendSlots = await getSlots();
 
             // SVG情報とバックエンドの状態をマージ
-            const merged = slotPositions.map(pos => {
-                const backend = backendSlots.find(b => b.id === pos.id);
-                return {
-                    ...pos,
-                    status: backend?.status || "empty",
-                    car_number: backend?.car_number || "",
-                };
+            const merged = slotPositions.map((pos) => {
+              const backend = backendSlots.find((b) => b.id === pos.id);
+              return {
+                ...pos,
+                status: backend?.status || "empty",
+                car_number: backend?.car_number || "",
+              };
             });
 
-            setSlots(merged);
-        };
+          setSlots(merged);
+        },
+        []
+    );
 
-        fetchSlots();
-    }, []);
+    useEffect(() => {
+        calculateSlots();
 
+        window.addEventListener("resize", calculateSlots);
+        return () => window.removeEventListener("resize", calculateSlots);
+    }, [calculateSlots]);
 
     const handleClick = async (slot) => {
         let becameOccupied = false;
@@ -94,7 +107,7 @@ export default function ParkingMap(){
 
     return (
         <>
-        <div className="w-full max-w-4xl mx-auto" style={{ height: 600 }}>
+        <div className="relative w-full max-w-4xl mx-auto">
             <ParkingSVG 
                 ref={svgRef}
                 className="w-full h-auto"
@@ -105,7 +118,7 @@ export default function ParkingMap(){
                     className='absolute cursor-pointer flex items-center justify-center'
                     style={{
                         position: "absolute",
-                        top: slot.y + 25,
+                        top: slot.y,
                         left: slot.x,
                         width: slot.width,
                         height: slot.height,

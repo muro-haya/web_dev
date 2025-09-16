@@ -2,10 +2,13 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from database import SessionLocal, engine
+
 from models import Slot, Base
 from schemas import SlotSchema
 from init_data import init_slots
+
+from database import engine, Base, get_db
+from routers import search, tasks
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,15 +24,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(search.router)
+app.include_router(tasks.router)
+
 class SlotUpdate(BaseModel):
     car_number: str | None = None
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.get("/slots/")
 def get_slots(db: Session = Depends(get_db)):

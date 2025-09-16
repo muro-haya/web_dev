@@ -6,5 +6,12 @@ DATABASE_URL = "postgresql://parking_memory_user:2qFKwMwjQbVo8ds42sYiTJmDpS265Lp
 # DATABASE_URL = "sqlite:///./parking_memory.db"
 
 engine = create_engine(DATABASE_URL, echo=True)
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False)
 Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

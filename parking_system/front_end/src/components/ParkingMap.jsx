@@ -65,7 +65,7 @@ export default function ParkingMap(){
 
     // WebSocket 初期化
     useEffect(() => {
-        wsRef.current = new WebSocket(`${API_BASE}/ws`);
+        wsRef.current = new WebSocket(`wss://parking-system-backend-cctx.onrender.com/ws`);
         wsRef.current.onmessage = (event) => {
             const updatedSlot = JSON.parse(event.data);
             setSlots((prev) =>

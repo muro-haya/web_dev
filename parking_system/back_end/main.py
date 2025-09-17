@@ -10,6 +10,7 @@ from init_data import init_slots
 
 from database import engine, Base, get_db
 from routers import search, tasks
+from utils.ws import clients, broadcast
 
 Base.metadata.create_all(bind=engine)
 
@@ -30,13 +31,6 @@ app.include_router(tasks.router)
 
 class SlotUpdate(BaseModel):
     car_number: str | None = None
-
-async def broadcast(data: str):
-    for client in clients:
-        try:
-            await client.send_text(data)
-        except Exception:
-            pass
 
 @app.get("/slots/")
 def get_slots(db: Session = Depends(get_db)):

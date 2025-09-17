@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import Task, Slot
 from schemas import TaskCreate, TaskSchema, TaskUpdate
-from main import broadcast  # ← broadcast をインポート（main.py にある）
+from utils.ws import broadcast
 
 router = APIRouter()
 

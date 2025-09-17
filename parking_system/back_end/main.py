@@ -59,9 +59,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            # 他のクライアントへブロードキャスト
             for client in clients:
-                if client != websocket:
-                    await client.send_text(data)
+                await client.send_text(data)
     except WebSocketDisconnect:
         clients.remove(websocket)

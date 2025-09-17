@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 from models import Slot, Base
 from schemas import SlotSchema
@@ -17,8 +18,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://web-dev-gamma-three.vercel.app"],
-    # allow_origins=["http://localhost:3000"],
+    # allow_origins=["https://web-dev-gamma-three.vercel.app"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,3 +51,17 @@ def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_d
 @app.get("/")
 def root():
     return {"message": "Parking System Backend is running!"}
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    clients.append(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # 他のクライアントへブロードキャスト
+            for client in clients:
+                if client != websocket:
+                    await client.send_text(data)
+    except WebSocketDisconnect:
+        clients.remove(websocket)

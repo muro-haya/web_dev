@@ -8,9 +8,12 @@ export default function ParkingMap(){
     const [slots, setSlots ] = useState([]);
     const [selected, setSelected] = useState(null);
     const svgRef = useRef(null);
+    const wsRef = useRef(null);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     const calculateSlots = useCallback(
         async () => {
+
             if (!svgRef.current) return;
 
             const svg = svgRef.current;
@@ -60,6 +63,20 @@ export default function ParkingMap(){
         return () => window.removeEventListener("resize", calculateSlots);
     }, [calculateSlots]);
 
+    // WebSocket 初期化
+    useEffect(() => {
+        wsRef.current = new WebSocket(`${API_BASE}/ws`);
+        wsRef.current.onmessage = (event) => {
+            const updatedSlot = JSON.parse(event.data);
+            setSlots((prev) =>
+                prev.map((s) => 
+                    s.id === updatedSlot.id ? { ...s, ...updatedSlot } : s
+                )
+            );
+        };
+        return () => wsRef.current.close();
+    }, [API_BASE]);
+
     const handleClick = async (slot) => {
         let becameOccupied = false;
 
@@ -85,6 +102,7 @@ export default function ParkingMap(){
         const newSlot = updatedSlots.find(s => s.id === slot.id);
         try {
             await updateSlot(slot.id, newSlot.car_number); // car_number が "" の場合 empty に
+            wsRef.current.send(JSON.stringify(newSlot));
         } catch (err) {
             console.error("Failed to update slot:", err);
         }

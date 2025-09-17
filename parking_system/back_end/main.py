@@ -31,6 +31,13 @@ app.include_router(tasks.router)
 class SlotUpdate(BaseModel):
     car_number: str | None = None
 
+async def broadcast(data: str):
+    for client in clients:
+        try:
+            await client.send_text(data)
+        except Exception:
+            pass
+
 @app.get("/slots/")
 def get_slots(db: Session = Depends(get_db)):
     return db.query(Slot).all()
@@ -47,13 +54,8 @@ def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_d
     db.commit()
     db.refresh(slot)
 
-    # WebSocketに通知
     data = SlotSchema.from_orm(slot).json()
-    for client in clients:
-        try:
-            await client.send_text(data)
-        except Exception:
-            pass
+    asyncio.create_task(broadcast(data))
 
     return slot
 

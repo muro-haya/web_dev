@@ -46,6 +46,15 @@ def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_d
 
     db.commit()
     db.refresh(slot)
+
+    # WebSocketに通知
+    data = SlotSchema.from_orm(slot).json()
+    for client in clients:
+        try:
+            await client.send_text(data)
+        except Exception:
+            pass
+
     return slot
 
 @app.get("/")
@@ -58,8 +67,6 @@ async def websocket_endpoint(websocket: WebSocket):
     clients.append(websocket)
     try:
         while True:
-            data = await websocket.receive_text()
-            for client in clients:
-                await client.send_text(data)
+            await websocket.receive_text()
     except WebSocketDisconnect:
         clients.remove(websocket)

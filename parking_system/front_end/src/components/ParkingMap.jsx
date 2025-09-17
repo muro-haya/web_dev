@@ -102,7 +102,6 @@ export default function ParkingMap(){
         const newSlot = updatedSlots.find(s => s.id === slot.id);
         try {
             await updateSlot(slot.id, newSlot.car_number); // car_number が "" の場合 empty に
-            wsRef.current.send(JSON.stringify(newSlot));
         } catch (err) {
             console.error("Failed to update slot:", err);
         }

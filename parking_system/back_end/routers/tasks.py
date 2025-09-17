@@ -20,6 +20,15 @@ def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_task)
     task = db.query(Task).options(joinedload(Task.slot)).filter(Task.id == new_task.id).first()
+
+    # WebSocketに通知
+    data = SlotSchema.from_orm(slot).json()
+    for client in clients:
+        try:
+            await client.send_text(data)
+        except Exception:
+            pass
+
     return task
 
 @router.get("/tasks/", response_model=list[TaskSchema])

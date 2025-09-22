@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+import asyncio
+import json
 
 from models import Slot, Base
 from schemas import SlotSchema
@@ -19,8 +21,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ "https://web-dev-gamma-three.vercel.app"],
-                    # "http://localhost:3000"],
+    allow_origins=[ "https://web-dev-gamma-three.vercel.app",
+                    "http://localhost:3000",
+                    "http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,7 +40,7 @@ def get_slots(db: Session = Depends(get_db)):
     return db.query(Slot).all()
 
 @app.post("/slots/{slot_id}/", response_model=SlotSchema)
-def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_db)):
+async def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_db)):
     slot = db.query(Slot).filter(Slot.id == slot_id).first()
     if not slot:
         raise Exception("Slot not found")

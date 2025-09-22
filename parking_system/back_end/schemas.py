@@ -8,8 +8,7 @@ class SlotSchema(BaseModel):
     status: str
     car_number: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class TaskCreate(BaseModel):
     slot_id: int

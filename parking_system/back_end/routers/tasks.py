@@ -1,4 +1,6 @@
 import asyncio
+import json
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from database import get_db
@@ -9,7 +11,7 @@ from utils.ws import broadcast
 router = APIRouter()
 
 @router.post("/tasks/", response_model=TaskSchema)
-def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
+async def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
     slot = db.get(Slot, payload.slot_id)
     if not slot:
         raise HTTPException(status_code=400, detail="Slot not found")
@@ -43,7 +45,7 @@ def list_tasks(db: Session = Depends(get_db)):
 
 
 @router.patch("/tasks/{task_id}/", response_model=TaskSchema)
-def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)):
+async def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -73,7 +75,7 @@ def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)
 
 
 @router.delete("/tasks/{task_id}/")
-def delete_task(task_id: int, db: Session = Depends(get_db)):
+async def delete_task(task_id: int, db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")

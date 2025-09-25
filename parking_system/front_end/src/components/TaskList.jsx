@@ -1,5 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useWebSocket } from "../hooks/useWebSocket";
+
 const API_BASE = process.env.REACT_APP_API_URL;
+
+export function useTaskWebSocket(setTasks, url) {
+  useWebSocket(url, (msg) => {
+    if (msg.event === "task_deleted") {
+      setTasks(prev => prev.filter(t => t.id !== msg.id));
+    } else {
+      setTasks(prev => {
+        const exists = prev.find(t => t.id === msg.id);
+        return exists
+          ? prev.map(t => t.id === msg.id ? msg : t)
+          : [msg, ...prev];
+      });
+    }
+  });
+}
+
 
 export default function TaskList({ refreshKey }) {
   const [tasks, setTasks] = useState([]);
@@ -18,7 +36,11 @@ export default function TaskList({ refreshKey }) {
     }
   };
 
+  // Get initial tasks
   useEffect(() => { fetchTasks(); }, [refreshKey]);
+
+  // useTaskWebSocket(setTasks, "wss://parking-system-backend-cctx.onrender.com/ws");
+  useTaskWebSocket(setTasks, "ws://localhost:8000/ws");
 
   const toggleDone = async (task) => {
     try {

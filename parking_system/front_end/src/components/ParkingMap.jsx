@@ -1,86 +1,28 @@
-import React, { useState, useEffect, useRef, useCallback} from 'react';
-import { getSlots, updateSlot } from "../api";
+import React, { useState, useRef} from 'react';
+import { updateSlot } from "../api";
+import { useSlotLayout } from "../hooks/useSlotLayout";
+import { useWebSocket } from "../hooks/useWebSocket";
 import { ReactComponent as ParkingSVG } from "../assets/parkingMap_v2.svg"
 import SlotModal from "./SlotModal";
 
+export function useSlotWebSocket(setSlots, url) {
+  useWebSocket(url, (updated) => {
+    setSlots(prev =>
+      prev.map(s => s.id === updated.id ? { ...s, ...updated } : s)
+    );
+  });
+}
 
 export default function ParkingMap(){
-    const [slots, setSlots ] = useState([]);
-    const [selected, setSelected] = useState(null);
     const svgRef = useRef(null);
-    const wsRef = useRef(null);
-    const API_BASE = process.env.REACT_APP_API_URL;
+    const [slots, setSlots] = useSlotLayout(svgRef);
+    const [selected, setSelected] = useState(null);
 
-    const calculateSlots = useCallback(
-        async () => {
-
-            if (!svgRef.current) return;
-
-            const svg = svgRef.current;
-            if (!svg.viewBox || !svg.viewBox.baseVal) return;
-
-            const viewBox = svg.viewBox.baseVal;
-            const rect = svg.getBoundingClientRect();
-
-            const scaleX = rect.width / viewBox.width;
-            const scaleY = rect.height / viewBox.height;
-
-            // SVG上の座標情報を取得
-            const slotElements = svg.querySelectorAll("[id^=slot-]");
-            const slotPositions = Array.from(slotElements).map((el) => {
-                const bbox = el.getBBox();
-                return {
-                  id: parseInt(el.id.replace("slot-", ""), 10),
-                  number: el.id.replace("slot-", ""),
-                  x: bbox.x * scaleX,
-                  y: bbox.y * scaleY,
-                  width: bbox.width * scaleX,
-                  height: bbox.height * scaleY,
-                };
-            });
-            // バックエンドから現在の状態を取得
-            const backendSlots = await getSlots();
-
-            // SVG情報とバックエンドの状態をマージ
-            const merged = slotPositions.map((pos) => {
-              const backend = backendSlots.find((b) => b.id === pos.id);
-              return {
-                ...pos,
-                status: backend?.status || "empty",
-                car_number: backend?.car_number || "",
-              };
-            });
-
-          setSlots(merged);
-        },
-        []
-    );
-
-    useEffect(() => {
-        calculateSlots();
-
-        window.addEventListener("resize", calculateSlots);
-        return () => window.removeEventListener("resize", calculateSlots);
-    }, [calculateSlots]);
-
-    // WebSocket 初期化
-    useEffect(() => {
-        // wsRef.current = new WebSocket(`wss://parking-system-backend-cctx.onrender.com/ws`);
-        wsRef.current = new WebSocket("ws://localhost:8000/ws");
-        wsRef.current.onmessage = (event) => {
-            const updatedSlot = JSON.parse(event.data);
-            setSlots((prev) =>
-                prev.map((s) => 
-                    s.id === updatedSlot.id ? { ...s, ...updatedSlot } : s
-                )
-            );
-        };
-        return () => wsRef.current.close();
-    }, [API_BASE]);
+    // useSlotWebSocket(setSlots, "wss://parking-system-backend-cctx.onrender.com/ws");
+    useSlotWebSocket(setSlots, "ws://localhost:8000/ws");
 
     const handleClick = async (slot) => {
         let becameOccupied = false;
-
         const updatedSlots = slots.map((s) => {
           if (s.id === slot.id) {
             const newStatus = s.status === "empty" ? "occupied" : "empty";
@@ -100,8 +42,8 @@ export default function ParkingMap(){
       
         setSlots(updatedSlots);
 
-        const newSlot = updatedSlots.find(s => s.id === slot.id);
         try {
+            const newSlot = updatedSlots.find(s => s.id === slot.id);
             await updateSlot(slot.id, newSlot.car_number); // car_number が "" の場合 empty に
         } catch (err) {
             console.error("Failed to update slot:", err);
@@ -109,17 +51,16 @@ export default function ParkingMap(){
         setSelected(becameOccupied ? slot : null);
     };
 
-    const handleSave = async (slotId, carNumber) => {
-        await updateSlot(slotId, carNumber);
+    const handleSave = async (id, carNumber) => {
+        await updateSlot(id, carNumber);
 
         setSlots((prev) =>
             prev.map((s) =>
-                s.id === slotId
+                s.id === id
                     ? { ...s, car_number: carNumber, status: "occupied" }
                     : s
             )
         );
-
         setSelected(null);
     };
 
@@ -131,7 +72,8 @@ export default function ParkingMap(){
                 className="w-full h-auto"
             />
             {slots.map((slot) => (
-                <div key={slot.id}
+                <div
+                    key={slot.id}
                     onClick={() => handleClick(slot)}
                     className='absolute cursor-pointer flex items-center justify-center'
                     style={{

@@ -6,10 +6,17 @@ import { ReactComponent as ParkingSVG } from "../assets/parkingMap_v2.svg"
 import SlotModal from "./SlotModal";
 
 export function useSlotWebSocket(setSlots, url) {
-  useWebSocket(url, (updated) => {
-    setSlots(prev =>
-      prev.map(s => s.id === updated.id ? { ...s, ...updated } : s)
-    );
+  useWebSocket(url, (msg) => {
+    switch (msg.type) {
+        case "slot_update":
+            setSlots(prev =>
+                prev.map(s =>
+                    s.id === msg.payload.id ? { ...s, ...msg.payload } : s
+                )
+            );
+            break;
+        default:
+    }   
   });
 }
 

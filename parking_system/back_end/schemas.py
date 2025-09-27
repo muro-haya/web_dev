@@ -11,7 +11,8 @@ class SlotSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 class TaskCreate(BaseModel):
-    slot_id: int
+    # slot_id: int
+    slot_id: Optional[str] = None
     priority: Literal["low", "medium", "high"] = "medium"
     memo: Optional[str] = None
 
@@ -22,7 +23,8 @@ class TaskUpdate(BaseModel):
 
 class TaskSchema(BaseModel):
     id: int
-    slot_id: int
+    # slot_id: int
+    slot_id: Optional[str] = None
     priority: str
     memo: Optional[str] = None
     done: bool

@@ -1,8 +1,10 @@
 import asyncio
 import json
-
+from datetime import datetime
+from fastapi.encoders import jsonable_encoder
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
+
 from database import get_db
 from models import Task, Slot
 from schemas import TaskCreate, TaskSchema, TaskUpdate
@@ -12,10 +14,7 @@ router = APIRouter()
 
 @router.post("/tasks/", response_model=TaskSchema)
 async def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
-    slot = db.get(Slot, payload.slot_id)
-    if not slot:
-        raise HTTPException(status_code=400, detail="Slot not found")
-
+    # Create new task
     new_task = Task(
         slot_id=payload.slot_id,
         priority=payload.priority,
@@ -25,19 +24,15 @@ async def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_task)
 
-    task = (
-        db.query(Task)
-        .options(joinedload(Task.slot))
-        .filter(Task.id == new_task.id)
-        .first()
-    )
+    # WebSocket broadcast
+    message = {
+        "type": "todo_update",                          # Message type for the client
+        "payload": jsonable_encoder(TaskSchema.from_orm(new_task)),
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+    asyncio.create_task(broadcast(message))
 
-    # WebSocket 経由で通知
-    data = TaskSchema.from_orm(task).json()
-    asyncio.create_task(broadcast(data))
-
-    return task
-
+    return new_task
 
 @router.get("/tasks/", response_model=list[TaskSchema])
 def list_tasks(db: Session = Depends(get_db)):
@@ -62,17 +57,19 @@ async def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(g
 
     task = (
         db.query(Task)
-        .options(joinedload(Task.slot))
         .filter(Task.id == task.id)
         .first()
     )
 
-    # WebSocket 経由で通知
-    data = TaskSchema.from_orm(task).json()
-    asyncio.create_task(broadcast(data))
+    # WebSocket broadcast
+    message = {
+        "type": "todo_update",                          # Message type for the client
+        "payload": jsonable_encoder(TaskSchema.from_orm(task)), 
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+    asyncio.create_task(broadcast(message))
 
     return task
-
 
 @router.delete("/tasks/{task_id}/")
 async def delete_task(task_id: int, db: Session = Depends(get_db)):
@@ -83,8 +80,11 @@ async def delete_task(task_id: int, db: Session = Depends(get_db)):
     db.delete(task)
     db.commit()
 
-    # 削除通知を投げたい場合
-    data = {"event": "task_deleted", "id": task_id}
-    asyncio.create_task(broadcast(json.dumps(data)))
+    message = {
+        "type": "todo_deleted",  # ← message type for deletion
+        "payload": {"id": task_id},  # deleted task id
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+    asyncio.create_task(broadcast(message))
 
     return {"ok": True}

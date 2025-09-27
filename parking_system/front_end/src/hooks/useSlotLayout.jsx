@@ -49,8 +49,18 @@ export function useSlotLayout(svgRef) {
 
   useEffect(() => {
     calculateSlots(); // run on mount
+
+    // Observe actual size changes of the SVG (caused by list growth, etc.)
+    const observer = new ResizeObserver(() => calculateSlots());
+    if (svgRef.current) observer.observe(svgRef.current);
+
     window.addEventListener("resize", calculateSlots); // recalc on resize
-    return () => window.removeEventListener("resize", calculateSlots);
+
+    return () => {
+      if (svgRef.current) observer.unobserve(svgRef.current);
+      observer.disconnect();
+      window.removeEventListener("resize", calculateSlots);
+    };
   }, [calculateSlots]);
 
   return [slots, setSlots]; // current slots + updater

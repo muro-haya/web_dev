@@ -18,5 +18,6 @@ class Task(Base):
     done = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    slot_id = Column(Integer, ForeignKey("slots.id"), nullable=False)
-    slot = relationship("Slot", backref="tasks")
+    slot_id = Column(String, nullable=False)
+    # slot_id = Column(Integer, ForeignKey("slots.id"), nullable=False)
+    # slot = relationship("Slot", backref="tasks")

@@ -5,19 +5,24 @@ const API_BASE = process.env.REACT_APP_API_URL;
 
 export function useTaskWebSocket(setTasks, url) {
   useWebSocket(url, (msg) => {
-    if (msg.event === "task_deleted") {
-      setTasks(prev => prev.filter(t => t.id !== msg.id));
-    } else {
-      setTasks(prev => {
-        const exists = prev.find(t => t.id === msg.id);
-        return exists
-          ? prev.map(t => t.id === msg.id ? msg : t)
-          : [msg, ...prev];
-      });
+    switch (msg.type) {
+      case "todo_update":
+        setTasks(prev => {
+          const exists = prev.find(t => t.id === msg.payload.id);
+          return exists
+            ? prev.map(t => t.id === msg.payload.id ? msg.payload : t)
+            : [msg.payload, ...prev];
+        });
+        break;
+      
+      case "todo_deleted":
+        setTasks(prev => prev.filter(t => t.id !== msg.payload.id));
+        break;
+      
+      default:
     }
   });
 }
-
 
 export default function TaskList({ refreshKey }) {
   const [tasks, setTasks] = useState([]);
@@ -74,7 +79,7 @@ export default function TaskList({ refreshKey }) {
             <li key={t.id} className="border-b py-2 flex justify-between items-start">
               <div>
                 <div className={t.done ? "line-through text-gray-500" : ""}>
-                  {t.slot ? t.slot.car_number : `Slot ${t.slot_id}`} — Priority: {t.priority}
+                  {t.slot ? t.slot.car_number : `${t.slot_id}`} — Priority: {t.priority}
                 </div>
                 {t.memo && <div className="text-sm text-gray-600">{t.memo}</div>}
               </div>

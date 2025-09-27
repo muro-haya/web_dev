@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 import json
+from datetime import datetime
 
 from models import Slot, Base
 from schemas import SlotSchema
@@ -45,14 +46,19 @@ async def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends
     if not slot:
         raise Exception("Slot not found")
 
+    # Update database record
     slot.car_number = slot_data.car_number
     slot.status = "occupied" if slot.car_number else "empty"
-
     db.commit()
     db.refresh(slot)
 
-    data = SlotSchema.from_orm(slot).json()
-    asyncio.create_task(broadcast(data))
+   # Broadcast slot update to all clients
+    message = {
+        "type": "slot_update",                        # Message type
+        "payload": SlotSchema.from_orm(slot).dict(),  # Actual slot data
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+    asyncio.create_task(broadcast(message))
 
     return slot
 
@@ -66,6 +72,9 @@ async def websocket_endpoint(websocket: WebSocket):
     clients.append(websocket)
     try:
         while True:
+            # Keep the connection alive by waiting for ping/pong or empty messages
             await websocket.receive_text()
     except WebSocketDisconnect:
-        clients.remove(websocket)
+        # Clean up disconnected client
+        if websocket in clients:
+            clients.remove(websocket)

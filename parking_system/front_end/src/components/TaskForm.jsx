@@ -12,7 +12,7 @@ export default function TaskForm({ slot, onAdded, onCancel }) {
       const res = await fetch(`${API_BASE}/tasks/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slot_id: slot.id, priority, memo })
+        body: JSON.stringify({ slot_id: slot.car_number, priority, memo })
       });
       if (!res.ok) throw new Error("create failed");
       const data = await res.json();

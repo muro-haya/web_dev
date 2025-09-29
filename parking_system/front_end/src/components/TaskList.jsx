@@ -44,8 +44,8 @@ export default function TaskList({ refreshKey }) {
   // Get initial tasks
   useEffect(() => { fetchTasks(); }, [refreshKey]);
 
-  // useTaskWebSocket(setTasks, "wss://parking-system-backend-cctx.onrender.com/ws");
-  useTaskWebSocket(setTasks, "ws://localhost:8000/ws");
+  useTaskWebSocket(setTasks, "wss://parking-system-backend-cctx.onrender.com/ws");
+  // useTaskWebSocket(setTasks, "ws://localhost:8000/ws");
 
   const toggleDone = async (task) => {
     try {

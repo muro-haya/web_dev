@@ -25,8 +25,8 @@ export default function ParkingMap(){
     const [slots, setSlots] = useSlotLayout(svgRef);
     const [selected, setSelected] = useState(null);
 
-    // useSlotWebSocket(setSlots, "wss://parking-system-backend-cctx.onrender.com/ws");
-    useSlotWebSocket(setSlots, "ws://localhost:8000/ws");
+    useSlotWebSocket(setSlots, "wss://parking-system-backend-cctx.onrender.com/ws");
+    // useSlotWebSocket(setSlots, "ws://localhost:8000/ws");
 
     const handleClick = async (slot) => {
         let becameOccupied = false;

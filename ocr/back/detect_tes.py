@@ -71,8 +71,6 @@ class PlateDetector:
         kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
         blur_img = cv2.dilate(gray_img, kernel)
         blur_img = cv2.erode(blur_img, kernel)
-        # kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (11, 11))
-        # blur_img = cv2.erode(blur_img, kernel)
 
         # 2値化
         _, thresh_img = cv2.threshold(
@@ -91,11 +89,39 @@ class PlateDetector:
         )
         return result.strip()
 
-    def detect_and_read(self, img_path: str):
+    def detect_and_read_path(self, img_path: str):
         """
-        Carry out detecting and reading
+        Carry out detecting and reading with using img path
         """
         img, detections = self.detect_plates(img_path)
         for det in detections:
             det["text"] = self.read_text(det["image"])
+        return img, detections
+
+    def detect_and_read_img(self, img):
+        """
+        Carry out detecting and reading with using numpy list
+        """
+        results = self.model(img, conf=self.conf_thresh)
+        detections = []
+
+        for r in results:
+            for box in r.boxes.xyxy:
+                x1, y1, x2, y2 = map(int, box.tolist())
+                plate_img = img[y1:y2, x1:x2]
+
+                # Cut out lines
+                h, w = plate_img.shape[:2]
+                margin_h = int(h * 0.10)
+                margin_w = int(w * 0.05)
+                inner_img = plate_img[
+                    margin_h : max(h - margin_h, margin_h + 1),
+                    margin_w : max(w - margin_w, margin_w + 1)
+                ]
+
+                text = self.read_text(plate_img)  # OCR
+                detections.append({
+                    "box": (x1, y1, x2, y2),
+                    "text": text
+                })
         return img, detections

@@ -5,6 +5,8 @@ import { useWebSocket } from "../hooks/useWebSocket";
 import { ReactComponent as ParkingSVG } from "../assets/parkingMap_v2.svg"
 import SlotModal from "./SlotModal";
 
+const WS_URL = process.env.REACT_APP_WS_URL;
+
 export function useSlotWebSocket(setSlots, url) {
   useWebSocket(url, (msg) => {
     switch (msg.type) {
@@ -25,8 +27,9 @@ export default function ParkingMap(){
     const [slots, setSlots] = useSlotLayout(svgRef);
     const [selected, setSelected] = useState(null);
 
-    useSlotWebSocket(setSlots, "wss://parking-system-backend-cctx.onrender.com/ws");
+    // useSlotWebSocket(setSlots, "wss://parking-system-backend-cctx.onrender.com/ws");
     // useSlotWebSocket(setSlots, "ws://localhost:8000/ws");
+    useSlotWebSocket(setSlots, `${WS_URL}`);
 
     const handleClick = async (slot) => {
         let becameOccupied = false;

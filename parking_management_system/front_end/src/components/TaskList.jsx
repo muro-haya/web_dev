@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 
 const API_BASE = process.env.REACT_APP_API_URL;
+const WS_URL = process.env.REACT_APP_WS_URL;
+const STATUS_FLOW = ["NotYet", "OnIt", "Done"];
+const LABEL_MAP = {
+  NotYet: "Start",
+  OnIt: "Complete",
+  Done: "Reset"
+};
 
 export function useTaskWebSocket(setTasks, url) {
   useWebSocket(url, (msg) => {
@@ -44,18 +51,25 @@ export default function TaskList({ refreshKey }) {
   // Get initial tasks
   useEffect(() => { fetchTasks(); }, [refreshKey]);
 
-  useTaskWebSocket(setTasks, "wss://parking-system-backend-cctx.onrender.com/ws");
+  // useTaskWebSocket(setTasks, "wss://parking-system-backend-cctx.onrender.com/ws");
   // useTaskWebSocket(setTasks, "ws://localhost:8000/ws");
+  useTaskWebSocket(setTasks, `${WS_URL}`);
 
-  const toggleDone = async (task) => {
+  const nextStatus = (current) => {
+    const idx = STATUS_FLOW.indexOf(current);
+    return STATUS_FLOW[(idx + 1) % STATUS_FLOW.length];
+  };
+
+  const toggleStatus = async (task) => {
     try {
+      const newStatus = nextStatus(task.status);
       const res = await fetch(`${API_BASE}/tasks/${task.id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ done: !task.done })
+        body: JSON.stringify({ status: newStatus })
       });
       const updated = await res.json();
-      setTasks(tasks.map(t => (t.id === updated.id ? updated : t)));
+      setTasks(prevTasks => prevTasks.map(t => (t.id === updated.id ? updated : t)));
     } catch (err) {
       console.error(err);
     }
@@ -78,14 +92,34 @@ export default function TaskList({ refreshKey }) {
           {tasks.map(t => (
             <li key={t.id} className="border-b py-2 flex justify-between items-start">
               <div>
-                <div className={t.done ? "line-through text-gray-500" : ""}>
+                <div
+                  className={
+                    t.status === "Done"
+                      ? "line-through text-gray-500"
+                      : t.status === "OnIt"
+                      ? "text-blue-600"
+                      : ""
+                  }
+                >
                   {t.slot ? t.slot.car_number : `${t.slot_id}`} — Priority: {t.priority}
                 </div>
                 {t.memo && <div className="text-sm text-gray-600">{t.memo}</div>}
               </div>
               <div className="flex gap-2">
-                <button onClick={() => toggleDone(t)} className="px-2 py-1 border rounded">{t.done ? "Unfinish" : "Finish"}</button>
-                <button onClick={() => deleteTask(t.id)} className="px-2 py-1 border rounded text-red-500">Delete</button>
+                {/* console.log("task.status", t.status); */}
+                <button
+                  onClick={() => toggleStatus(t)}
+                  className="px-2 py-1 border rounded"
+                >
+                  {LABEL_MAP[t.status] || "Reset"}
+                  {LABEL_MAP[t.status]}
+                </button>
+                <button
+                  onClick={() => deleteTask(t.id)} 
+                  className="px-2 py-1 border rounded text-red-500"
+                  >
+                    Delete
+                  </button>
               </div>
             </li>
           ))}

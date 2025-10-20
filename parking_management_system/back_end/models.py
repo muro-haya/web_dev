@@ -17,6 +17,7 @@ class Task(Base):
     memo = Column(Text, nullable=True)
     done = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    status = Column(String, default="NotYet", nullable=False)
 
     slot_id = Column(String, nullable=False)
     # slot_id = Column(Integer, ForeignKey("slots.id"), nullable=False)

@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className='min-h-screen bg-gray-100 p-4'>
-      <h1 className='text-2x1 font-bold mb-4'>Parking System</h1>
+      <h1 className='text-2x1 font-bold mb-4'>Parking Management System</h1>
       <ParkingMap />
 
       <SlotSearch onSelect={setSelectedSlot} />

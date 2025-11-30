@@ -3,22 +3,27 @@ import React, { useState } from "react";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Upload() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [detections, setDetections] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);   // Holds the actual selected file
+  const [preview, setPreview] = useState(null);             // Local preview URL for showing the chosen image
+  const [detections, setDetections] = useState([]);         // List of detected plate results returned from backend
 
+  // Send selected image to backend for analysis
   const handleUpload = async () => {
     if (!selectedFile) return;
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append("file", selectedFile);                  // Attach image file
 
     try {
+      // POST request to FastAPI backend
       const res = await fetch(`${API_BASE}/analyze`, {
         method: "POST",
         body: formData,
       });
+      
       const data = await res.json();
+
+      // Save detection results (or empty list if nothing returned)
       setDetections(data.detections || []);
     } catch (err) {
       console.error(err);

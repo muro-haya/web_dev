@@ -21,8 +21,8 @@ And give the command to move a car.
 
 ## 🛠️ Built With
 
-- JavaScript -front end
-- Python     -back_end
+- JavaScript -front end (React, Tailwind CSS)
+- Python     -back_end (FastAPI, WebSocket, SQLite)
 
 ---
 ## 🙌 Author

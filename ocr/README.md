@@ -20,9 +20,10 @@ Select a picture of a car, and this app will automatically detect and read its l
 
 ## 🛠️ Built With
 
-- JavaScript -front end
-- Python     -back_end
+- JavaScript -front end (React, Tailwind CSS)
+- Python     -back_end  (FastAPI, OpenCV, Yolo, Tesseract OCR)
 
 ---
+
 ## 🙌 Author
 [@muro-haya](https://github.com/muro-haya)
